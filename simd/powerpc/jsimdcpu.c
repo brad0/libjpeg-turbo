@@ -158,7 +158,8 @@ jpeg_simd_cpu_support(void)
   if (sysctl(mib, 2, &altivec, &len, NULL, 0) == 0 && altivec != 0)
     simd_support |= JSIMD_ALTIVEC;
 #elif defined(HAVE_ELF_AUX_INFO)
-  elf_aux_info(AT_HWCAP, &cpufeatures, sizeof(cpufeatures));
+  if (elf_aux_info(AT_HWCAP, &cpufeatures, sizeof(cpufeatures)) != 0)
+    cpufeatures = 0;
   if (cpufeatures & PPC_FEATURE_HAS_ALTIVEC)
     simd_support |= JSIMD_ALTIVEC;
 #endif

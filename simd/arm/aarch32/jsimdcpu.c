@@ -128,7 +128,8 @@ jpeg_simd_cpu_support(void)
       break;
   }
 #elif defined(HAVE_ELF_AUX_INFO)
-  elf_aux_info(AT_HWCAP, &cpufeatures, sizeof(cpufeatures));
+  if (elf_aux_info(AT_HWCAP, &cpufeatures, sizeof(cpufeatures)) != 0)
+    cpufeatures = 0;
   if (cpufeatures & HWCAP_NEON)
     simd_support |= JSIMD_NEON;
 #endif

@@ -77,7 +77,8 @@ jpeg_simd_cpu_support(void)
   if (cpufeatures & COMPAT_HWCAP_ISA_V && is_rvv_1_0_available())
     simd_support |= JSIMD_RVV;
 #elif defined(HAVE_ELF_AUX_INFO)
-  elf_aux_info(AT_HWCAP, &cpufeatures, sizeof(cpufeatures));
+  if (elf_aux_info(AT_HWCAP, &cpufeatures, sizeof(cpufeatures)) != 0)
+    cpufeatures = 0;
   if (cpufeatures & COMPAT_HWCAP_ISA_V && is_rvv_1_0_available())
     simd_support |= JSIMD_RVV;
 #endif
